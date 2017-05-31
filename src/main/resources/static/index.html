@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Index</title>
+</head>
+<body>
+<h1>Curriculum Vitae</h1>
+<form action="#" th:action="@{/build/personalData}" th:object="${String}" method="post">
+    <p>Dane personalne</p>
+    <input type="text" th:field="*{personalData}" />
+</form>
+<form action="#" th:action="@{/build/education}" th:object="${String}" method="post">
+    <p>Edukacja</p>
+    <input type="text" th:field="*{education}" />
+</form>
+<td>
+    <button name="submit" type="submit" th:action="@{/build/generate}">Submit</button>
+</td>
+</body>
+</html>
