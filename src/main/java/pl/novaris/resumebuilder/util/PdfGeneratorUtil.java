@@ -1,11 +1,13 @@
 package pl.novaris.resumebuilder.util;
 
+import com.lowagie.text.pdf.BaseFont;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
+import org.xhtmlrenderer.pdf.PDFEncryption;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,6 +39,7 @@ public class PdfGeneratorUtil {
             os = new FileOutputStream(outputFile);
 
             ITextRenderer renderer = new ITextRenderer();
+            renderer.getFontResolver().addFont("C:\\Windows\\Fonts\\ARIALUNI.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             renderer.setDocumentFromString(processedHtml);
             renderer.layout();
             renderer.createPDF(os, false);

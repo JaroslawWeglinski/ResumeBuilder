@@ -2,47 +2,51 @@ package pl.novaris.resumebuilder.controller;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import pl.novaris.resumebuilder.entity.Resume;
+import pl.novaris.resumebuilder.entity.repository.*;
 import pl.novaris.resumebuilder.util.PdfGeneratorUtil;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
-@RestController
-@RequestMapping("/build")
+@Controller
 public class BuildController {
 
     @Autowired
     PdfGeneratorUtil pdfGeneratorUtil;
 
-    static private Map<String,String> buildData = new HashMap<>();
+    @Autowired
+    private ResumeRepository resumeRepository;
 
-    @RequestMapping(value = "/personalData", method = RequestMethod.POST)
-    public void addPersonalData(Optional<String> maybePersonalData) throws Exception {
-        String personalData = maybePersonalData.filter(StringUtils::isNotBlank).orElse("unknown");
+    @Autowired
+    @Qualifier("resume")
+    private Resume resume;
 
-        buildData.put("personalData",personalData);
-
+    @RequestMapping(value = {"/","/build"}, method = RequestMethod.GET)
+    public String showIndex(Model model){
+        model.addAttribute("resume", new Resume());
+        return "index";
     }
 
-    @RequestMapping(value = "/education", method = RequestMethod.POST)
-    public void addEducation(Optional<String> maybeEducation) throws Exception {
-        String education = maybeEducation.filter(StringUtils::isNotBlank).orElse("unknown");
-
-        buildData.put("education",education);
-
-    }
-
-    @RequestMapping("/generate")
-    public void generatePdf() {
+    @RequestMapping(value = "/build", method = RequestMethod.POST)
+    public String generatePdf(@ModelAttribute Resume newResume) {
         try {
-            pdfGeneratorUtil.createPdf("test", buildData);
+            resumeRepository.add("target",newResume.getTarget());
+            resumeRepository.add("education",newResume.getEducation());
+            resumeRepository.add("languages",newResume.getLanguages());
+            resumeRepository.add("certificates",newResume.getCertificates());
+            resumeRepository.add("hobbies",newResume.getHobbies());
+            pdfGeneratorUtil.createPdf("cv", resumeRepository.getResumeData());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return "result";
     }
 }

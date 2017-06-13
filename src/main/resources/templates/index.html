@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Index</title>
+</head>
+<body>
+<h1>Curriculum Vitae</h1>
+<form action="#" th:action="@{/build}" th:object="${resume}" method="post">
+    <p>Cel zawodowy</p>
+    <input type="text" th:field="*{target}" />
+
+    <p>Edukacja</p>
+    <input type="text" th:field="*{education}" />
+
+    <p>Języki</p>
+    <input type="text" th:field="*{languages}" />
+
+    <p>Certyfikaty</p>
+    <input type="text" th:field="*{certificates}" />
+
+    <p>Zainteresowania</p>
+    <input type="text" th:field="*{hobbies}" />
+
+
+    <p><button name="submit" value="Submit" >Generate</button></p>
+
+</form>
+</body>
+</html>
