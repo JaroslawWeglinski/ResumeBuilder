@@ -1,6 +1,5 @@
 package pl.novaris.resumebuilder.controller;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -9,10 +8,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pl.novaris.resumebuilder.entity.Resume;
-import pl.novaris.resumebuilder.entity.repository.*;
+import pl.novaris.resumebuilder.service.ResumeService;
 import pl.novaris.resumebuilder.util.PdfGeneratorUtil;
 
-import java.util.Optional;
 
 @Controller
 public class BuildController {
@@ -21,7 +19,7 @@ public class BuildController {
     PdfGeneratorUtil pdfGeneratorUtil;
 
     @Autowired
-    private ResumeRepository resumeRepository;
+    private ResumeService resumeService;
 
     @Autowired
     @Qualifier("resume")
@@ -36,12 +34,12 @@ public class BuildController {
     @RequestMapping(value = "/build", method = RequestMethod.POST)
     public String generatePdf(@ModelAttribute Resume newResume) {
         try {
-            resumeRepository.add("target",newResume.getTarget());
-            resumeRepository.add("education",newResume.getEducation());
-            resumeRepository.add("languages",newResume.getLanguages());
-            resumeRepository.add("certificates",newResume.getCertificates());
-            resumeRepository.add("hobbies",newResume.getHobbies());
-            pdfGeneratorUtil.createPdf("cv", resumeRepository.getResumeData());
+            resumeService.add("target",newResume.getTarget());
+            resumeService.add("education",newResume.getEducation());
+            resumeService.add("languages",newResume.getLanguages());
+            resumeService.add("certificates",newResume.getCertificates());
+            resumeService.add("hobbies",newResume.getHobbies());
+            pdfGeneratorUtil.createPdf("cv", resumeService.getResumeData());
 
         } catch (Exception e) {
             e.printStackTrace();
