@@ -1,4 +1,4 @@
-package pl.novaris.resumebuilder.entity;
+package pl.novaris.resumebuilder.dao.entity;
 
 import org.springframework.context.annotation.Configuration;
 

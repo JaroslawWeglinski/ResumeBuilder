@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import pl.novaris.resumebuilder.entity.Resume;
+import pl.novaris.resumebuilder.dao.entity.*;
 import pl.novaris.resumebuilder.service.ResumeService;
 import pl.novaris.resumebuilder.util.PdfGeneratorUtil;
 
@@ -19,6 +19,7 @@ public class BuildController {
     PdfGeneratorUtil pdfGeneratorUtil;
 
     @Autowired
+    @Qualifier("resumeService")
     private ResumeService resumeService;
 
     @Autowired
@@ -34,11 +35,11 @@ public class BuildController {
     @RequestMapping(value = "/build", method = RequestMethod.POST)
     public String generatePdf(@ModelAttribute Resume newResume) {
         try {
-            resumeService.add("target",newResume.getTarget());
-            resumeService.add("education",newResume.getEducation());
-            resumeService.add("languages",newResume.getLanguages());
-            resumeService.add("certificates",newResume.getCertificates());
-            resumeService.add("hobbies",newResume.getHobbies());
+            resumeService.addData("target",newResume.getTarget());
+            resumeService.addData("education",newResume.getEducation());
+            resumeService.addData("languages",newResume.getLanguages());
+            resumeService.addData("certificates",newResume.getCertificates());
+            resumeService.addData("hobbies",newResume.getHobbies());
             pdfGeneratorUtil.createPdf("cv", resumeService.getResumeData());
 
         } catch (Exception e) {

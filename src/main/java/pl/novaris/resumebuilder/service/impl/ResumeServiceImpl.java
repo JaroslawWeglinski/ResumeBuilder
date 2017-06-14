@@ -1,22 +1,26 @@
-package pl.novaris.resumebuilder.service;
+package pl.novaris.resumebuilder.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import pl.novaris.resumebuilder.dao.entity.repository.*;
+import pl.novaris.resumebuilder.dao.ResumeDao;
+import pl.novaris.resumebuilder.service.ResumeService;
 
 import java.util.Map;
 
 @Service
-public class ResumeService {
+@Qualifier("resumeService")
+public class ResumeServiceImpl implements ResumeService{
     @Autowired
-    ResumeRepository resumeRepository;
+    @Qualifier("tempRepo")
+    private ResumeDao resumeDao;
 
     public Map<String,String> getResumeData(){
-        return resumeRepository.getResumeData();
+        return resumeDao.getResumeData();
     }
 
     public void addData(String key, String value){
-        resumeRepository.addData(key,value);
+        resumeDao.addData(key,value);
     }
 
 }

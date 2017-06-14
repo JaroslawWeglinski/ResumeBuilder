@@ -1,5 +1,8 @@
 package pl.novaris.resumebuilder.service;
 
-public interface ResumeService {
+import java.util.Map;
 
+public interface ResumeService {
+    public Map<String,String> getResumeData();
+    public void addData(String key, String value);
 }
