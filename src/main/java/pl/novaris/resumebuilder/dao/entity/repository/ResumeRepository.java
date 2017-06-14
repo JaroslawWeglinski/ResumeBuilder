@@ -13,7 +13,7 @@ public class ResumeRepository {
         return resumeData;
     }
 
-    public void add(String key, String value){
+    public void addData(String key, String value){
         resumeData.put(key,value);
     }
 }
