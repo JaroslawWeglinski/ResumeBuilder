@@ -2,6 +2,7 @@ package pl.novaris.resumebuilder.util;
 
 import com.lowagie.text.pdf.BaseFont;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.thymeleaf.TemplateEngine;
@@ -18,6 +19,10 @@ import java.util.UUID;
 
 @Component
 public class PdfGeneratorUtil {
+
+    @Value("${pdf.path}")
+    private String pdfFilePath;
+
     @Autowired
     private TemplateEngine templateEngine;
     public void createPdf(String templateName, Map map) throws Exception{
@@ -35,7 +40,7 @@ public class PdfGeneratorUtil {
         FileOutputStream os = null;
         String fileName = UUID.randomUUID().toString();
         try {
-            final File outputFile = File.createTempFile(fileName, ".pdf"); //directory in new File("C:\\directory") format
+            final File outputFile = File.createTempFile(fileName, ".pdf", new File(pdfFilePath)); // pdfFilePath must be specified in configuration.properties file in C:\\path format
             os = new FileOutputStream(outputFile);
 
             ITextRenderer renderer = new ITextRenderer();
