@@ -3,6 +3,7 @@ package pl.novaris.resumebuilder.util;
 import com.lowagie.text.pdf.BaseFont;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.thymeleaf.TemplateEngine;
@@ -15,12 +16,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.UUID;
 
 @Component
 public class PdfGeneratorUtil {
 
-    @Value("${pdf.path}")
     private String pdfFilePath;
 
     @Autowired
@@ -35,6 +36,9 @@ public class PdfGeneratorUtil {
                 ctx.setVariable(pair.getKey().toString(),pair.getValue());
             }
         }
+
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("configuration");
+        pdfFilePath = resourceBundle.getString("pdf.path");
 
         String processedHtml = templateEngine.process(templateName, ctx);
         FileOutputStream os = null;

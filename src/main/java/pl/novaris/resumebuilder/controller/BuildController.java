@@ -26,7 +26,7 @@ public class BuildController {
     @Qualifier("resume")
     private Resume resume;
 
-    @RequestMapping(value = {"/","/build"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"", "/","/build"}, method = RequestMethod.GET)
     public String showIndex(Model model){
         model.addAttribute("resume", new Resume());
         return "index";
