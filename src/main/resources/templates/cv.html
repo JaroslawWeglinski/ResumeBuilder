@@ -1,65 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html" charset="iso-8859-2"/>
     <link rel="stylesheet" type="text/css" href="../css/cv.css" />
     <style type="text/css">
-        *
-        {
+
+        div {
             font-family: "Arial Unicode MS";
+            background-color:white;
+            font-size="13";}
+        h1,h2{font-family:"Arian Unicode MS";
+            text-weight:bold;
+        }
+        .cel_zawodowy, .doswiadczenie,.jezyk,.imie_nazwisko,.wyksztalcenie,.certyfikaty,.zainteresowania{
+            font-family:Arial;
+            font-style:normal;
+            align=justify;
+            font-size:12ptk;
         }
     </style>
     <title>CV</title>
 </head>
-<body>
+<body leftmargin="100" rightmargin="100" topmargin="130" bottommargin="130">
 <center>
 
-    <h1>Curriculum Vitae</h1>
-
+    <h1><b><font size="15">Curriculum Vitae</font></b></h1>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
 </center>
 <div style='border:none;border-bottom:solid #CFCFCF 1.0pt;
 mso-border-bottom-alt:solid #CFCFCF .75pt;padding:0cm 0cm 0.0pt 0cm'>
-    <h3><b>Cel zawodowy </b></h3>
+    <img src="novaris.jpg" width ="180" height="110"
+         style="float:right" />
+
+    <h2><b>Imię Nazwisko </b></h2>
     <ul>
-        <p th:text="${target}" />
+        <p th:text="${target}"> </p>
+    </ul>
+</div>
+<div style='border:none;border-bottom:solid #CFCFCF 1.0pt;
+mso-border-bottom-alt:solid #CFCFCF .75pt;padding:0cm 0cm 0.0pt 0cm'
+     font="arial" size="10">
+    <h2><b> Cel zawodowy </b></h2>
+    <ul><p class="cel_zawodowy">
+        sssssfd
+    </p>
+        <p th:text="${target}"> </p>
     </ul>
 </div>
 <div style='border:none;border-bottom:solid #CFCFCF 1.0pt;
 mso-border-bottom-alt:solid #CFCFCF .75pt;padding:0cm 0cm 0.0pt 0cm'>
-    <h3><b>Wykształcenie</b></h3>
-    <table><tr>
-        <p th:text="${education}" />
-    </tr>
-    </table>
-</div>
+    <h2><b>Wykształcenie</b></h2>
+    <ul><p class="wyksztalcenie">
+        dsiuasjhfhjfs
+    </p>
 
+        <p th:text="${target}"> </p>
+    </ul>
+</div>
 <div style='border:none;border-bottom:solid #CFCFCF 1.0pt;
 mso-border-bottom-alt:solid #CFCFCF .75pt;padding:0cm 0cm 0.0pt 0cm'>
-    <h3><b>Języki</b></h3>
-    <ul>
-        <p th:text="${languages}" />
+    <h2><b>Doświadczenie</b></h2>
+    <ul type="disc"> <p class="doswiadczenie">
+        <li>ssdd</li>
+        <li>sdfsgvsf</li>
+        <li></li>
+        <li></li>
+        <li></li>
+
+        </p>
+
+        <p th:text="${target}"> </p>
+    </ul>
+</div>
+<div style='border:none;border-bottom:solid #CFCFCF 1.0pt;
+mso-border-bottom-alt:solid #CFCFCF .75pt;padding:0cm 0cm 0.0pt 0cm'>
+    <h2><b>Języki</b></h2>
+    <ul><p class="jezyk">
+        dsiuasjhfhjfs
+    </p>
+
+        <p th:text="${target}"> </p>
     </ul>
 </div>
 
 <div style='border:none;border-bottom:solid #CFCFCF 1.0pt;
 mso-border-bottom-alt:solid #CFCFCF .75pt;padding:0cm 0cm 0.0pt 0cm'>
-    <h3><b>Certyfikaty</b></h3>
-    <ul>
-        <p th:text="${certificates}" />
+    <h2><b>Certyfikaty</b></h2>
+    <ul><p class="certyfikaty">
+        dsiuasjhfhjfs
+    </p>
+
+        <p th:text="${target}"> </p>
     </ul>
 </div>
 
 <div style='border:none;border-bottom:solid #CFCFCF 1.0pt;
 mso-border-bottom-alt:solid #CFCFCF .75pt;padding:0cm 0cm 0.0pt 0cm'>
-    <h3><b>Zainteresowania</b></h3>
-        <ul>
-            <p th:text="${hobbies}" />
-        </ul>
+    <h2><b>Zainteresowania</b></h2>
+    <ul><p class="zainteresowania">
+        dsiuasjhfhjfs
+    </p>
+
+        <p th:text="${target}"> </p>
+    </ul>
 </div>
-<p>Wyrażam zgodę na przetwarzanie moich danych osobowych dla
+<p align="justify"><i>Wyrażam zgodę na przetwarzanie moich danych osobowych dla
     potrzeb niezbędnych do realizacji procesu rekrutacji zgodnie z Ustawą z dn.
-<ul>      </ul> roku o Ochronie Danych Osobowych Dz. Ust. nr 133 poz.883.</p>
+    roku o Ochronie Danych Osobowych Dz. Ust. nr 133 poz.883.</i></p>
 </body>
 </html>
