@@ -18,4 +18,5 @@ public interface DocX4JResumeService {
     void addParagraphsToTemplate(String templateName, String placeholder, String textToAdd, ContentAccessor addTo);
     void addTablesToTemplate(String templateName, String[] placeholders, List<Map<String,String>> textToAdd, String target) throws IOException, Docx4JException, JAXBException;
     void addImageToTemplate(String templateName, String placeholder, File image, String target) throws Exception;
+    void convertDocxToPDF(String templateName, String target) throws FileNotFoundException, Docx4JException;
 }

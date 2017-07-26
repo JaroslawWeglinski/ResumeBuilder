@@ -1,5 +1,6 @@
 package pl.novaris.resumebuilder.controller;
 
+import org.docx4j.Docx4J;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 @Controller
 @RequestMapping("/docx4j")
@@ -35,6 +37,15 @@ public class DocX4JController {
     @Qualifier("resume")
     private Resume resume;
 
+    private ResourceBundle resourceBundle = ResourceBundle.getBundle("configuration");
+
+    private String templateName = resourceBundle.getString("template.name");;
+    private String docxFileName = resourceBundle.getString("docx.file.name");;
+    private String imageSourcePath = resourceBundle.getString("image.source.path");;
+    private String pdfDestinationPath = resourceBundle.getString("pdf.destination.path");;
+
+
+
     @RequestMapping(value = "/fill", method = RequestMethod.GET)
     public String fillTemplate(Model model) {
 
@@ -46,7 +57,7 @@ public class DocX4JController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String createDocX(@ModelAttribute Resume newResume) throws Exception {
 
-        WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new FileInputStream(new File("DOCX_TEMPLATE2.docx")));
+        WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new FileInputStream(new File(templateName)));
 
         HashMap<String, String> mappings = new HashMap<>();
 
@@ -108,15 +119,19 @@ public class DocX4JController {
         //wordMLPackage.getMainDocumentPart().addParagraphOfText("from docx4j!");
 
         // Now save it
-        wordMLPackage.save(new java.io.File(System.getProperty("user.dir") + "/DOCX_FILE.docx"));
+        wordMLPackage.save(new java.io.File(System.getProperty("user.dir") + "/" + docxFileName));
 
-        docX4JResumeService.addTablesToTemplate("DOCX_FILE.docx", new String[]{"EDUCATION_TIME","UNIVERSITY_NAME",
+        docX4JResumeService.addTablesToTemplate(docxFileName, new String[]{"EDUCATION_TIME","UNIVERSITY_NAME",
                 "UNIVERSITY_COURSE"}, Arrays.asList(educationOne,educationTwo),
-                System.getProperty("user.dir") + "/DOCX_FILE.docx");
+                System.getProperty("user.dir") + "/" + docxFileName);
 
-        docX4JResumeService.addImageToTemplate("DOCX_FILE.docx", "PICTURE", new File("C:\\GeneratorCV\\cv.jpg"), System.getProperty("user.dir") + "/DOCX_FILE.docx");
+        docX4JResumeService.addImageToTemplate(docxFileName, "PICTURE", new File(imageSourcePath), System.getProperty("user.dir") + "/" + docxFileName);
 
         //docX4JResumeService.replacePlaceholdersInTemplate("DOCX_TEMPLATE.docx", "${NAME}", "JAROSLAW", System.getProperty("user.dir") + "/DOCX_FILE.docx");
+
+        docX4JResumeService.convertDocxToPDF(docxFileName, pdfDestinationPath);
+
+        System.out.println("Done.");
 
         return "result";
     }

@@ -1,6 +1,7 @@
 package pl.novaris.resumebuilder.service.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.docx4j.Docx4J;
 import org.docx4j.XmlUtils;
 import org.docx4j.dml.wordprocessingDrawing.Inline;
 import org.docx4j.jaxb.Context;
@@ -395,5 +396,12 @@ public class DocX4JResumeServiceImpl implements DocX4JResumeService {
         }
 
         writeDocxToStream(template, target);
+    }
+
+    @Override
+    public void convertDocxToPDF(String templateName, String target) throws FileNotFoundException, Docx4JException {
+        WordprocessingMLPackage document = getTemplate(templateName);
+
+        Docx4J.toPDF(document, new FileOutputStream(target));
     }
 }
