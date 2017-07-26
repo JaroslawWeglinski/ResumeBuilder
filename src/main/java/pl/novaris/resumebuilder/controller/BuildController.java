@@ -26,7 +26,7 @@ public class BuildController {
     @Qualifier("resume")
     private Resume resume;
 
-    @RequestMapping(value = {"", "/","/build"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/build", method = RequestMethod.GET)
     public String showIndex(Model model){
         model.addAttribute("resume", new Resume());
         return "index";
@@ -36,10 +36,6 @@ public class BuildController {
     public String generatePdf(@ModelAttribute Resume newResume) {
         try {
             resumeService.addData("target",newResume.getTarget());
-            resumeService.addData("education",newResume.getEducation());
-            resumeService.addData("languages",newResume.getLanguages());
-            resumeService.addData("certificates",newResume.getCertificates());
-            resumeService.addData("hobbies",newResume.getHobbies());
             pdfGeneratorUtil.createPdf("cv", resumeService.getResumeData());
 
         } catch (Exception e) {
