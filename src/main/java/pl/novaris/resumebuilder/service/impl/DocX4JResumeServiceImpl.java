@@ -2,8 +2,11 @@ package pl.novaris.resumebuilder.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.docx4j.XmlUtils;
+import org.docx4j.dml.wordprocessingDrawing.Inline;
+import org.docx4j.jaxb.Context;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
 import org.docx4j.wml.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -12,10 +15,7 @@ import pl.novaris.resumebuilder.service.ResumeService;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 @Service
@@ -269,6 +269,56 @@ public class DocX4JResumeServiceImpl implements DocX4JResumeService {
         }
     }
 
+    private static P addInlineImageToParagraph(Inline inline) {
+        // Now add the in-line image to a paragraph
+        ObjectFactory factory = new ObjectFactory();
+        P paragraph = factory.createP();
+        R run = factory.createR();
+        paragraph.getContent().add(run);
+        Drawing drawing = factory.createDrawing();
+        run.getContent().add(drawing);
+        drawing.getAnchorOrInline().add(inline);
+        return paragraph;
+    }
+
+
+    private static Inline createInlineImage(File file, WordprocessingMLPackage template) throws Exception {
+        byte[] bytes = convertImageToByteArray(file);
+
+        BinaryPartAbstractImage imagePart =
+                BinaryPartAbstractImage.createImagePart(template, bytes);
+
+        int docPrId = 1;
+        int cNvPrId = 2;
+
+        return imagePart.createImageInline("Filename hint",
+                "Alternative text", docPrId, cNvPrId, false);
+    }
+
+
+    private static byte[] convertImageToByteArray(File file)
+            throws FileNotFoundException, IOException {
+        InputStream is = new FileInputStream(file);
+        long length = file.length();
+        // You cannot create an array using a long, it needs to be an int.
+        if (length > Integer.MAX_VALUE) {
+            System.out.println("File too large!!");
+        }
+        byte[] bytes = new byte[(int)length];
+        int offset = 0;
+        int numRead = 0;
+        while (offset < bytes.length && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
+            offset += numRead;
+        }
+        // Ensure all the bytes have been read
+        if (offset < bytes.length) {
+            System.out.println("Could not completely read file "+file.getName());
+        }
+        is.close();
+        return bytes;
+    }
+
+
     @Override
     public void replacePlaceholdersInTemplate(String templateName, String placeholder, String value, String target) throws IOException, Docx4JException {
 
@@ -304,5 +354,46 @@ public class DocX4JResumeServiceImpl implements DocX4JResumeService {
         WordprocessingMLPackage template = getTemplate(templateName);
         replaceTable(placeholders, textToAdd, template);
         writeDocxToStream(template,target);
+    }
+
+    @Override
+    public void addImageToTemplate(String templateName, String placeholder, File image, String target) throws Exception {
+        WordprocessingMLPackage template = getTemplate(templateName);
+        ObjectFactory factory = Context.getWmlObjectFactory();
+
+        List elemetns = getAllElementFromObject(template.getMainDocumentPart(), Tbl.class);
+
+        for(Object obj : elemetns){
+            if(obj instanceof Tbl){
+                Tbl table = (Tbl) obj;
+                List rows = getAllElementFromObject(table, Tr.class);
+                for(Object trObj : rows){
+                    Tr tr = (Tr) trObj;
+                    List cols = getAllElementFromObject(tr, Tc.class);
+                    for(Object tcObj : cols){
+                        Tc tc = (Tc) tcObj;
+                        List texts = getAllElementFromObject(tc, Text.class);
+                        for(Object textObj : texts){
+                            Text text = (Text) textObj;
+                            if(text.getValue().equalsIgnoreCase("PICTURE")){
+                                P paragraphWithImage = addInlineImageToParagraph(createInlineImage(image, template));
+                                PPr paragraphProperties = factory.createPPr();
+                                Jc justification = factory.createJc();
+                                justification.setVal(JcEnumeration.CENTER);
+                                paragraphProperties.setJc(justification);
+                                paragraphWithImage.setPPr(paragraphProperties);
+                                tc.getContent().remove(0);
+
+                                tc.getContent().add(paragraphWithImage);
+                            }
+                        }
+                        System.out.println("here");
+                    }
+                }
+                System.out.println("here");
+            }
+        }
+
+        writeDocxToStream(template, target);
     }
 }

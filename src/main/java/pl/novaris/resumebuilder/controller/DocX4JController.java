@@ -44,9 +44,9 @@ public class DocX4JController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String createDocX(@ModelAttribute Resume newResume) throws Docx4JException, IOException, JAXBException {
+    public String createDocX(@ModelAttribute Resume newResume) throws Exception {
 
-        WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new FileInputStream(new File("DOCX_TEMPLATE.docx")));
+        WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new FileInputStream(new File("DOCX_TEMPLATE2.docx")));
 
         HashMap<String, String> mappings = new HashMap<>();
 
@@ -57,7 +57,7 @@ public class DocX4JController {
         mappings.put("LOCATION","Miejsce zamieszkania");
         mappings.put("EMAIL","Adres e-mail");
         mappings.put("PHONE","Numer telefonu");
-        mappings.put("PICTURE","");
+        //mappings.put("PICTURE","");
         mappings.put("TARGET","Cel zawodowy");
         mappings.put("EDUCATION","Wykształcenie");
         mappings.put("EXPERIENCE","Doświadczenie");
@@ -75,10 +75,6 @@ public class DocX4JController {
         mappings.put("EMAIL_VAL", newResume.getEmail());
         mappings.put("PHONE_VAL", newResume.getPhone());
         mappings.put("TARGET_VAL", newResume.getTarget());
-        //mappings.put("EDUCATION_FROM","2013");
-        //mappings.put("EDUCATION_TO","2016");
-        //mappings.put("UNIVERSITY_NAME","VI LO im. Jana Kochanowskiego w Radomiu");
-        //mappings.put("UNIVERSITY_COURSE","mat-fiz-inf");
         mappings.put("EXPERIENCE_TIME", newResume.getExperienceTime());
         mappings.put("EXPERIENCE_NAME", newResume.getExperienceName());
         mappings.put("EXPERIENCE_ROLE_NAME", newResume.getExperienceRoleName());
@@ -118,6 +114,7 @@ public class DocX4JController {
                 "UNIVERSITY_COURSE"}, Arrays.asList(educationOne,educationTwo),
                 System.getProperty("user.dir") + "/DOCX_FILE.docx");
 
+        docX4JResumeService.addImageToTemplate("DOCX_FILE.docx", "PICTURE", new File("C:\\GeneratorCV\\cv.jpg"), System.getProperty("user.dir") + "/DOCX_FILE.docx");
 
         //docX4JResumeService.replacePlaceholdersInTemplate("DOCX_TEMPLATE.docx", "${NAME}", "JAROSLAW", System.getProperty("user.dir") + "/DOCX_FILE.docx");
 
