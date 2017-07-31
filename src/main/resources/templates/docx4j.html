@@ -6,8 +6,8 @@
 </head>
 <body>
 <h1>Curriculum Vitae</h1>
-<form action="#" th:action="@{/docx4j/create}" th:object="${resume}" method="post">
-
+<form action="#" th:action="@{/docx4j/fill}" th:object="${resume}" method="post">
+  <fieldset>
     <p>Imię</p>
     <textarea type="textarea" th:field="*{name}" />
 
@@ -50,17 +50,43 @@
     <p>Wykształcenie 2 - nazwa kierunku</p>
     <textarea type="textarea" th:field="*{universityCourseTwo}" />
 
-    <p>Doświadczenie - lata</p>
-    <textarea type="textarea" th:field="*{experienceTime}" />
 
-    <p>Doświadczenie - nazwa pracodawcy</p>
-    <textarea type="textarea" th:field="*{experienceName}" />
-
-    <p>Doświadczenie - nazwa stanowiska</p>
-    <textarea type="textarea" th:field="*{experienceRoleName}" />
-
-    <p>Doświadczenie - opis</p>
-    <textarea type="textarea" th:field="*{experienceDescription}" />
+    <p>Doświadczenie</p>
+    <div>
+        <label>Doświadczenie</label>
+        <table>
+            <thead>
+            <tr>
+                <th>Lata</th>
+                <th>Pracodawca</th>
+                <th>Stanowisko</th>
+                <th>Opis</th>
+                <th>
+                    <button type="submit" name="addExperience">Dodaj doświadczenie</button>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="experience,expStat : *{experiences}">
+                <td>
+                    <textarea type="textarea" th:field="*{experiences[__${expStat.index}__].time}" th:errorclass="fieldError" />
+                </td>
+                <td>
+                    <textarea type="textarea" th:field="*{experiences[__${expStat.index}__].name}" th:errorclass="fieldError" />
+                </td>
+                <td>
+                    <textarea type="textarea" th:field="*{experiences[__${expStat.index}__].roleName}" th:errorclass="fieldError" />
+                </td>
+                <td>
+                    <textarea type="textarea" th:field="*{experiences[__${expStat.index}__].description}" th:errorclass="fieldError" />
+                </td>
+                <td>
+                    <button type="submit" name="removeRow" th:value="${expStat.index}">Usuń doświadczenie</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
     <p>Umiejętności - nazwa</p>
     <textarea type="textarea" th:field="*{skillName}" />
@@ -80,8 +106,8 @@
     <p>Zainteresowania</p>
     <textarea type="textarea" th:field="*{hobby}" />
 
-    <p><button name="submit" value="Submit" >Generate</button></p>
-
+    <p><button type="submit" name="save" >Generate</button></p>
+  </fieldset>
 </form>
 </body>
 </html>

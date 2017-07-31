@@ -3,6 +3,9 @@ package pl.novaris.resumebuilder.dao.entity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration(value="resume")
 public class Resume {
     private String name;
@@ -19,16 +22,14 @@ public class Resume {
     private String educationTimeTwo;
     private String universityNameTwo;
     private String universityCourseTwo;
-    private String experienceTime;
-    private String experienceName;
-    private String experienceRoleName;
-    private String experienceDescription;
     private String skillName;
     private String skillDescription;
     private String languageName;
     private String languageLevel;
     private String certificate;
     private String hobby;
+
+    private List<Experience> experiences = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -142,38 +143,6 @@ public class Resume {
         this.universityCourseTwo = universityCourseTwo;
     }
 
-    public String getExperienceTime() {
-        return experienceTime;
-    }
-
-    public void setExperienceTime(String experienceTime) {
-        this.experienceTime = experienceTime;
-    }
-
-    public String getExperienceName() {
-        return experienceName;
-    }
-
-    public void setExperienceName(String experienceName) {
-        this.experienceName = experienceName;
-    }
-
-    public String getExperienceRoleName() {
-        return experienceRoleName;
-    }
-
-    public void setExperienceRoleName(String experienceRoleName) {
-        this.experienceRoleName = experienceRoleName;
-    }
-
-    public String getExperienceDescription() {
-        return experienceDescription;
-    }
-
-    public void setExperienceDescription(String experienceDescription) {
-        this.experienceDescription = experienceDescription;
-    }
-
     public String getSkillName() {
         return skillName;
     }
@@ -220,5 +189,13 @@ public class Resume {
 
     public void setHobby(String hobby) {
         this.hobby = hobby;
+    }
+
+    public List<Experience> getExperiences() {
+        return experiences;
+    }
+
+    public void setExperiences(List<Experience> experiences) {
+        this.experiences = experiences;
     }
 }

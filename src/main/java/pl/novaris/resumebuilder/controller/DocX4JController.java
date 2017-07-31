@@ -7,23 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import pl.novaris.resumebuilder.dao.entity.Experience;
 import pl.novaris.resumebuilder.dao.entity.Resume;
 import pl.novaris.resumebuilder.service.DocX4JResumeService;
 import pl.novaris.resumebuilder.service.ResumeService;
 import pl.novaris.resumebuilder.service.impl.DocX4JResumeServiceImpl;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @Controller
 @RequestMapping("/docx4j")
@@ -54,7 +54,20 @@ public class DocX4JController {
         return "docx4j";
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/fill", params = {"addExperience"})
+    public String addExperience(Resume resume, BindingResult bindingResult){
+        resume.getExperiences().add(new Experience());
+        return "docx4j";
+    }
+
+    @RequestMapping(value = "/fill", params = {"removeExperience"})
+    public String removeExperience(Resume resume, BindingResult bindingResult, HttpServletRequest req) {
+        Integer expId = Integer.valueOf(req.getParameter("removeExperience"));
+        resume.getExperiences().remove(expId.intValue());
+        return "docx4j";
+    }
+
+    @RequestMapping(value = "/fill", params = "save", method = RequestMethod.POST)
     public String createDocX(@ModelAttribute Resume newResume) throws Exception {
 
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new FileInputStream(new File(templateName)));
@@ -86,10 +99,6 @@ public class DocX4JController {
         mappings.put("EMAIL_VAL", newResume.getEmail());
         mappings.put("PHONE_VAL", newResume.getPhone());
         mappings.put("TARGET_VAL", newResume.getTarget());
-        mappings.put("EXPERIENCE_TIME", newResume.getExperienceTime());
-        mappings.put("EXPERIENCE_NAME", newResume.getExperienceName());
-        mappings.put("EXPERIENCE_ROLE_NAME", newResume.getExperienceRoleName());
-        mappings.put("EXPERIENCE_DESCRIPTION", newResume.getExperienceDescription());
         mappings.put("SKILL_NAME", newResume.getSkillName());
         mappings.put("SKILL_DESCRIPTION", newResume.getSkillDescription());
         mappings.put("LANGUAGE_NAME", newResume.getLanguageName());
@@ -123,6 +132,24 @@ public class DocX4JController {
 
         docX4JResumeService.addTablesToTemplate(docxFileName, new String[]{"EDUCATION_TIME","UNIVERSITY_NAME",
                 "UNIVERSITY_COURSE"}, Arrays.asList(educationOne,educationTwo),
+                System.getProperty("user.dir") + "/" + docxFileName);
+
+        List<Map<String,String>> theExperienceList = new LinkedList<>();
+
+        for (Experience experience : newResume.getExperiences()){
+
+            Map<String, String> theExperience = new HashMap<>();
+
+            theExperience.put("EXPERIENCE_TIME", experience.getTime());
+            theExperience.put("EXPERIENCE_NAME", experience.getName());
+            theExperience.put("EXPERIENCE_ROLE_NAME", experience.getRoleName());
+            theExperience.put("EXPERIENCE_DESCRIPTION", experience.getDescription());
+
+            theExperienceList.add(theExperience);
+        }
+
+        docX4JResumeService.addTablesToTemplate(docxFileName, new String[]{"EXPERIENCE_TIME","EXPERIENCE_NAME",
+                        "EXPERIENCE_ROLE_NAME", "EXPERIENCE_DESCRIPTION"}, theExperienceList,
                 System.getProperty("user.dir") + "/" + docxFileName);
 
         docX4JResumeService.addImageToTemplate(docxFileName, "PICTURE", new File(imageSourcePath), System.getProperty("user.dir") + "/" + docxFileName);
