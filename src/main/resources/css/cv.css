@@ -1,13 +1,13 @@
 div {
     font-family: "Arial Unicode MS";
     background-color:white;
-    font-size="13";}
+    font-size:13pt;}
 h1,h2{font-family:"Arian Unicode MS";
     text-weight:bold;
 }
 .cel_zawodowy, .doswiadczenie,.jezyk,.imie_nazwisko,.wyksztalcenie,.certyfikaty,.zainteresowania{
     font-family:Arial;
     font-style:normal;
-    align=justify;
-    font-size:12ptk;
+    align:justify;
+    font-size:12pt;
 }

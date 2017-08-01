@@ -3,6 +3,7 @@ package pl.novaris.resumebuilder.service.impl;
 import org.apache.commons.lang.StringUtils;
 import org.docx4j.Docx4J;
 import org.docx4j.XmlUtils;
+import org.docx4j.convert.out.HTMLSettings;
 import org.docx4j.dml.wordprocessingDrawing.Inline;
 import org.docx4j.jaxb.Context;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
@@ -399,9 +400,14 @@ public class DocX4JResumeServiceImpl implements DocX4JResumeService {
     }
 
     @Override
-    public void convertDocxToPDF(String templateName, String target) throws FileNotFoundException, Docx4JException {
+    public void convertDocxToPDF(String templateName, String target) throws IOException, Docx4JException {
         WordprocessingMLPackage document = getTemplate(templateName);
 
-        Docx4J.toPDF(document, new FileOutputStream(target));
+        FileOutputStream fos = new FileOutputStream(target);
+
+        Docx4J.toPDF(document, fos);
+
+        fos.close();
+
     }
 }

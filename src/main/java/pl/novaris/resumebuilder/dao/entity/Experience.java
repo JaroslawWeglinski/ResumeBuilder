@@ -1,10 +1,10 @@
 package pl.novaris.resumebuilder.dao.entity;
 
 public class Experience {
-    private String time = "time";
-    private String name = "name";
-    private String roleName = "roleName";
-    private String description = "description";
+    private String time;
+    private String name;
+    private String roleName;
+    private String description;
 
     public String getTime() {
         return time;
