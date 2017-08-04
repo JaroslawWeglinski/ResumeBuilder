@@ -16,18 +16,14 @@ public class Resume {
     private String email;
     private String phone;
     private String target;
-    private String educationTimeOne;
-    private String universityNameOne;
-    private String universityCourseOne;
-    private String educationTimeTwo;
-    private String universityNameTwo;
-    private String universityCourseTwo;
     private String skillName;
     private String skillDescription;
     private String languageName;
     private String languageLevel;
     private String certificate;
     private String hobby;
+
+    private List<Education> educations = new ArrayList<>();
 
     private List<Experience> experiences = new ArrayList<>();
 
@@ -95,54 +91,6 @@ public class Resume {
         this.target = target;
     }
 
-    public String getEducationTimeOne() {
-        return educationTimeOne;
-    }
-
-    public void setEducationTimeOne(String educationTimeOne) {
-        this.educationTimeOne = educationTimeOne;
-    }
-
-    public String getUniversityNameOne() {
-        return universityNameOne;
-    }
-
-    public void setUniversityNameOne(String universityNameOne) {
-        this.universityNameOne = universityNameOne;
-    }
-
-    public String getUniversityCourseOne() {
-        return universityCourseOne;
-    }
-
-    public void setUniversityCourseOne(String universityCourseOne) {
-        this.universityCourseOne = universityCourseOne;
-    }
-
-    public String getEducationTimeTwo() {
-        return educationTimeTwo;
-    }
-
-    public void setEducationTimeTwo(String educationTimeTwo) {
-        this.educationTimeTwo = educationTimeTwo;
-    }
-
-    public String getUniversityNameTwo() {
-        return universityNameTwo;
-    }
-
-    public void setUniversityNameTwo(String universityNameTwo) {
-        this.universityNameTwo = universityNameTwo;
-    }
-
-    public String getUniversityCourseTwo() {
-        return universityCourseTwo;
-    }
-
-    public void setUniversityCourseTwo(String universityCourseTwo) {
-        this.universityCourseTwo = universityCourseTwo;
-    }
-
     public String getSkillName() {
         return skillName;
     }
@@ -189,6 +137,14 @@ public class Resume {
 
     public void setHobby(String hobby) {
         this.hobby = hobby;
+    }
+
+    public List<Education> getEducations() {
+        return educations;
+    }
+
+    public void setEducations(List<Education> educations) {
+        this.educations = educations;
     }
 
     public List<Experience> getExperiences() {

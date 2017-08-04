@@ -32,23 +32,37 @@
     <p>Cel zawodowy</p>
     <textarea type="textarea" th:field="*{target}" />
 
-    <p>Wykształcenie 1 - lata</p>
-    <textarea type="textarea" th:field="*{educationTimeOne}" />
-
-    <p>Wykształcenie 1 - nazwa uczelni</p>
-    <textarea type="textarea" th:field="*{universityNameOne}" />
-
-    <p>Wykształcenie 1 - nazwa kierunku</p>
-    <textarea type="textarea" th:field="*{universityCourseOne}" />
-
-    <p>Wykształcenie 2 - lata</p>
-    <textarea type="textarea" th:field="*{educationTimeTwo}" />
-
-    <p>Wykształcenie 2 - nazwa uczelni</p>
-    <textarea type="textarea" th:field="*{universityNameTwo}" />
-
-    <p>Wykształcenie 2 - nazwa kierunku</p>
-    <textarea type="textarea" th:field="*{universityCourseTwo}" />
+      <div>
+          <label>Wykształcenie</label>
+          <table>
+              <thead>
+              <tr>
+                  <th>Lata</th>
+                  <th>Nazwa uczelnia</th>
+                  <th>Nazwa kierunku</th>
+                  <th>
+                      <button type="submit" name="addEducation">Dodaj wykształcenie</button>
+                  </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="education,eduStat : *{educations}">
+                  <td>
+                      <textarea type="textarea" th:field="*{educations[__${eduStat.index}__].time}" th:errorclass="fieldError" />
+                  </td>
+                  <td>
+                      <textarea type="textarea" th:field="*{educations[__${eduStat.index}__].universityName}" th:errorclass="fieldError" />
+                  </td>
+                  <td>
+                      <textarea type="textarea" th:field="*{educations[__${eduStat.index}__].universityCourse}" th:errorclass="fieldError" />
+                  </td>
+                  <td>
+                      <button type="submit" name="removeEducation" th:value="${eduStat.index}">Usuń wykształcenie</button>
+                  </td>
+              </tr>
+              </tbody>
+          </table>
+      </div>
 
     <div>
         <label>Doświadczenie</label>
@@ -79,7 +93,7 @@
                     <textarea type="textarea" th:field="*{experiences[__${expStat.index}__].description}" th:errorclass="fieldError" />
                 </td>
                 <td>
-                    <button type="submit" name="removeRow" th:value="${expStat.index}">Usuń doświadczenie</button>
+                    <button type="submit" name="removeExperience" th:value="${expStat.index}">Usuń doświadczenie</button>
                 </td>
             </tr>
             </tbody>

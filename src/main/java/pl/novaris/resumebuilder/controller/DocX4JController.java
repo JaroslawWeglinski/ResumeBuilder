@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import pl.novaris.resumebuilder.dao.entity.Education;
 import pl.novaris.resumebuilder.dao.entity.Experience;
 import pl.novaris.resumebuilder.dao.entity.Resume;
 import pl.novaris.resumebuilder.service.DocX4JResumeService;
@@ -51,6 +52,19 @@ public class DocX4JController {
 
         model.addAttribute("resume", new Resume());
 
+        return "docx4j";
+    }
+
+    @RequestMapping(value = "/fill", params = {"addEducation"})
+    public String addEducation(Resume resume, BindingResult bindingResult){
+        resume.getEducations().add(new Education());
+        return "docx4j";
+    }
+
+    @RequestMapping(value = "/fill", params = {"removeEducation"})
+    public String removeEducation(Resume resume, BindingResult bindingResult, HttpServletRequest req) {
+        Integer eduId = Integer.valueOf(req.getParameter("removeEducation"));
+        resume.getEducations().remove(eduId.intValue());
         return "docx4j";
     }
 
@@ -108,18 +122,6 @@ public class DocX4JController {
 
         wordMLPackage.getMainDocumentPart().variableReplace(mappings);
 
-        Map<String, String> educationOne = new HashMap<String, String>();
-
-        educationOne.put("EDUCATION_TIME", newResume.getEducationTimeOne());
-        educationOne.put("UNIVERSITY_NAME", newResume.getUniversityNameOne());
-        educationOne.put("UNIVERSITY_COURSE", newResume.getUniversityCourseOne());
-
-        Map<String, String> educationTwo = new HashMap<String, String>();
-
-        educationTwo.put("EDUCATION_TIME", newResume.getEducationTimeTwo());
-        educationTwo.put("UNIVERSITY_NAME", newResume.getUniversityNameTwo());
-        educationTwo.put("UNIVERSITY_COURSE", newResume.getUniversityCourseTwo());
-
 
 
         //wordMLPackage.getMainDocumentPart()
@@ -130,11 +132,24 @@ public class DocX4JController {
         // Now save it
         wordMLPackage.save(new java.io.File(System.getProperty("user.dir") + "/" + docxFileName));
 
+        List<Map<String,String>> theEducationList = new ArrayList<>();
+
+        for (Education education : newResume.getEducations()){
+
+            Map<String, String> theEducation = new HashMap<>();
+
+            theEducation.put("EDUCATION_TIME", education.getTime());
+            theEducation.put("UNIVERSITY_NAME", education.getUniversityName());
+            theEducation.put("UNIVERSITY_COURSE", education.getUniversityCourse());
+
+            theEducationList.add(theEducation);
+        }
+
         docX4JResumeService.addTablesToTemplate(docxFileName, new String[]{"EDUCATION_TIME","UNIVERSITY_NAME",
-                "UNIVERSITY_COURSE"}, Arrays.asList(educationOne,educationTwo),
+                        "UNIVERSITY_COURSE"}, theEducationList,
                 System.getProperty("user.dir") + "/" + docxFileName);
 
-        List<Map<String,String>> theExperienceList = new LinkedList<>();
+        List<Map<String,String>> theExperienceList = new ArrayList<>();
 
         for (Experience experience : newResume.getExperiences()){
 
