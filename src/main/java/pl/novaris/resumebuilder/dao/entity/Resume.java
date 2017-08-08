@@ -16,16 +16,16 @@ public class Resume {
     private String email;
     private String phone;
     private String target;
-    private String skillName;
-    private String skillDescription;
-    private String languageName;
-    private String languageLevel;
     private String certificate;
     private String hobby;
 
     private List<Education> educations = new ArrayList<>();
 
     private List<Experience> experiences = new ArrayList<>();
+
+    private List<Skill> skills = new ArrayList<>();
+
+    private List<Language> languages = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -91,38 +91,6 @@ public class Resume {
         this.target = target;
     }
 
-    public String getSkillName() {
-        return skillName;
-    }
-
-    public void setSkillName(String skillName) {
-        this.skillName = skillName;
-    }
-
-    public String getSkillDescription() {
-        return skillDescription;
-    }
-
-    public void setSkillDescription(String skillDescription) {
-        this.skillDescription = skillDescription;
-    }
-
-    public String getLanguageName() {
-        return languageName;
-    }
-
-    public void setLanguageName(String languageName) {
-        this.languageName = languageName;
-    }
-
-    public String getLanguageLevel() {
-        return languageLevel;
-    }
-
-    public void setLanguageLevel(String languageLevel) {
-        this.languageLevel = languageLevel;
-    }
-
     public String getCertificate() {
         return certificate;
     }
@@ -153,5 +121,21 @@ public class Resume {
 
     public void setExperiences(List<Experience> experiences) {
         this.experiences = experiences;
+    }
+
+    public List<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
+    }
+
+    public List<Language> getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(List<Language> languages) {
+        this.languages = languages;
     }
 }

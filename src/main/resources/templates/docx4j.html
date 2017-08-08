@@ -38,7 +38,7 @@
               <thead>
               <tr>
                   <th>Lata</th>
-                  <th>Nazwa uczelnia</th>
+                  <th>Nazwa uczelni</th>
                   <th>Nazwa kierunku</th>
                   <th>
                       <button type="submit" name="addEducation">Dodaj wykształcenie</button>
@@ -100,17 +100,61 @@
         </table>
     </div>
 
-    <p>Umiejętności - nazwa</p>
-    <textarea type="textarea" th:field="*{skillName}" />
+      <div>
+          <label>Umiejętności</label>
+          <table>
+              <thead>
+              <tr>
+                  <th>Nazwa</th>
+                  <th>Opis</th>
+                  <th>
+                      <button type="submit" name="addSkill">Dodaj umiejętność</button>
+                  </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="skill,skillStat : *{skills}">
+                  <td>
+                      <textarea type="textarea" th:field="*{skills[__${skillStat.index}__].name}" th:errorclass="fieldError" />
+                  </td>
+                  <td>
+                      <textarea type="textarea" th:field="*{skills[__${skillStat.index}__].description}" th:errorclass="fieldError" />
+                  </td>
+                  <td>
+                      <button type="submit" name="removeSkill" th:value="${skillStat.index}">Usuń umiejętność</button>
+                  </td>
+              </tr>
+              </tbody>
+          </table>
+      </div>
 
-    <p>Umiejętności - opis</p>
-    <textarea type="textarea" th:field="*{skillDescription}" />
-
-    <p>Języki - nazwa</p>
-    <textarea type="textarea" th:field="*{languageName}" />
-
-    <p>Języki - opis</p>
-    <textarea type="textarea" th:field="*{languageLevel}" />
+      <div>
+          <label>Języki</label>
+          <table>
+              <thead>
+              <tr>
+                  <th>Nazwa</th>
+                  <th>Poziom</th>
+                  <th>
+                      <button type="submit" name="addLanguage">Dodaj język</button>
+                  </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="language,langStat : *{languages}">
+                  <td>
+                      <textarea type="textarea" th:field="*{languages[__${langStat.index}__].name}" th:errorclass="fieldError" />
+                  </td>
+                  <td>
+                      <textarea type="textarea" th:field="*{languages[__${langStat.index}__].level}" th:errorclass="fieldError" />
+                  </td>
+                  <td>
+                      <button type="submit" name="removeLanguage" th:value="${langStat.index}">Usuń język</button>
+                  </td>
+              </tr>
+              </tbody>
+          </table>
+      </div>
 
     <p>Certyfikaty</p>
     <textarea type="textarea" th:field="*{certificate}" />

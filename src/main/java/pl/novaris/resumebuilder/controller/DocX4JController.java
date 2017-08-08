@@ -11,9 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import pl.novaris.resumebuilder.dao.entity.Education;
-import pl.novaris.resumebuilder.dao.entity.Experience;
-import pl.novaris.resumebuilder.dao.entity.Resume;
+import pl.novaris.resumebuilder.dao.entity.*;
 import pl.novaris.resumebuilder.service.DocX4JResumeService;
 import pl.novaris.resumebuilder.service.ResumeService;
 import pl.novaris.resumebuilder.service.impl.DocX4JResumeServiceImpl;
@@ -40,11 +38,10 @@ public class DocX4JController {
 
     private ResourceBundle resourceBundle = ResourceBundle.getBundle("configuration");
 
-    private String templateName = resourceBundle.getString("template.name");;
-    private String docxFileName = resourceBundle.getString("docx.file.name");;
-    private String imageSourcePath = resourceBundle.getString("image.source.path");;
-    private String pdfDestinationPath = resourceBundle.getString("pdf.destination.path");;
-
+    private String templateName = resourceBundle.getString("template.name");
+    private String docxFileName = resourceBundle.getString("docx.file.name");
+    private String imageSourcePath = resourceBundle.getString("image.source.path");
+    private String pdfDestinationPath = resourceBundle.getString("pdf.destination.path");
 
 
     @RequestMapping(value = "/fill", method = RequestMethod.GET)
@@ -56,7 +53,7 @@ public class DocX4JController {
     }
 
     @RequestMapping(value = "/fill", params = {"addEducation"})
-    public String addEducation(Resume resume, BindingResult bindingResult){
+    public String addEducation(Resume resume, BindingResult bindingResult) {
         resume.getEducations().add(new Education());
         return "docx4j";
     }
@@ -69,7 +66,7 @@ public class DocX4JController {
     }
 
     @RequestMapping(value = "/fill", params = {"addExperience"})
-    public String addExperience(Resume resume, BindingResult bindingResult){
+    public String addExperience(Resume resume, BindingResult bindingResult) {
         resume.getExperiences().add(new Experience());
         return "docx4j";
     }
@@ -78,6 +75,32 @@ public class DocX4JController {
     public String removeExperience(Resume resume, BindingResult bindingResult, HttpServletRequest req) {
         Integer expId = Integer.valueOf(req.getParameter("removeExperience"));
         resume.getExperiences().remove(expId.intValue());
+        return "docx4j";
+    }
+
+    @RequestMapping(value = "/fill", params = {"addSkill"})
+    public String addSkill(Resume resume, BindingResult bindingResult) {
+        resume.getSkills().add(new Skill());
+        return "docx4j";
+    }
+
+    @RequestMapping(value = "/fill", params = {"removeSkill"})
+    public String removeSkill(Resume resume, BindingResult bindingResult, HttpServletRequest req) {
+        Integer skillId = Integer.valueOf(req.getParameter("removeSkill"));
+        resume.getSkills().remove(skillId.intValue());
+        return "docx4j";
+    }
+
+    @RequestMapping(value = "/fill", params = {"addLanguage"})
+    public String addLanguage(Resume resume, BindingResult bindingResult) {
+        resume.getLanguages().add(new Language());
+        return "docx4j";
+    }
+
+    @RequestMapping(value = "/fill", params = {"removeLanguage"})
+    public String removeLanguage(Resume resume, BindingResult bindingResult, HttpServletRequest req) {
+        Integer langId = Integer.valueOf(req.getParameter("removeLanguage"));
+        resume.getLanguages().remove(langId.intValue());
         return "docx4j";
     }
 
@@ -91,37 +114,36 @@ public class DocX4JController {
         mappings.put("NAME", newResume.getName());
         mappings.put("SURNAME", newResume.getSurname());
 
-        mappings.put("BIRTHDAY","Data urodzenia");
-        mappings.put("LOCATION","Miejsce zamieszkania");
-        mappings.put("EMAIL","Adres e-mail");
-        mappings.put("PHONE","Numer telefonu");
+        mappings.put("BIRTHDAY", "Data urodzenia");
+        mappings.put("LOCATION", "Miejsce zamieszkania");
+        mappings.put("EMAIL", "Adres e-mail");
+        mappings.put("PHONE", "Numer telefonu");
         //mappings.put("PICTURE","");
-        mappings.put("TARGET","Cel zawodowy");
-        mappings.put("EDUCATION","Wykształcenie");
-        mappings.put("EXPERIENCE","Doświadczenie");
-        mappings.put("SKILLS","Umiejętności");
-        mappings.put("LANGUAGES","Języki");
-        mappings.put("CERTIFICATES","Certyfikaty");
-        mappings.put("HOBBIES","Zainteresowania");
-        mappings.put("FOOTER","Wyrażam zgodę na przetwarzanie moich danych osobowych dla potrzeb niezbędnych do"
-                      + " realizacji procesu rekrutacji zgodnie z Ustawą z dn. 29.08.97 roku o Ochronie Danych "
-                      + "Osobowych Dz. Ust. nr 133 poz.883.");
+        mappings.put("TARGET", "Cel zawodowy");
+        mappings.put("EDUCATION", "Wykształcenie");
+        mappings.put("EXPERIENCE", "Doświadczenie");
+        mappings.put("SKILLS", "Umiejętności");
+        mappings.put("LANGUAGES", "Języki");
+        mappings.put("CERTIFICATES", "Certyfikaty");
+        mappings.put("HOBBIES", "Zainteresowania");
+        mappings.put("FOOTER", "Wyrażam zgodę na przetwarzanie moich danych osobowych dla potrzeb niezbędnych do"
+                + " realizacji procesu rekrutacji zgodnie z Ustawą z dn. 29.08.97 roku o Ochronie Danych "
+                + "Osobowych Dz. Ust. nr 133 poz.883.");
 
-        mappings.put("BIRTHDAY_VAL",newResume.getBirthday());
+        mappings.put("BIRTHDAY_VAL", newResume.getBirthday());
         mappings.put("LOCATION_VAL1", newResume.getLocationOne());
         mappings.put("LOCATION_VAL2", newResume.getLocationTwo());
         mappings.put("EMAIL_VAL", newResume.getEmail());
         mappings.put("PHONE_VAL", newResume.getPhone());
         mappings.put("TARGET_VAL", newResume.getTarget());
-        mappings.put("SKILL_NAME", newResume.getSkillName());
-        mappings.put("SKILL_DESCRIPTION", newResume.getSkillDescription());
-        mappings.put("LANGUAGE_NAME", newResume.getLanguageName());
-        mappings.put("LANGUAGE_LEVEL", newResume.getLanguageLevel());
+        //mappings.put("SKILL_NAME", newResume.getSkillName());
+        //mappings.put("SKILL_DESCRIPTION", newResume.getSkillDescription());
+        //mappings.put("LANGUAGE_NAME", newResume.getLanguageName());
+        //mappings.put("LANGUAGE_LEVEL", newResume.getLanguageLevel());
         mappings.put("CERTIFICATE", newResume.getCertificate());
         mappings.put("HOBBY", newResume.getHobby());
 
         wordMLPackage.getMainDocumentPart().variableReplace(mappings);
-
 
 
         //wordMLPackage.getMainDocumentPart()
@@ -132,9 +154,9 @@ public class DocX4JController {
         // Now save it
         wordMLPackage.save(new java.io.File(System.getProperty("user.dir") + "/" + docxFileName));
 
-        List<Map<String,String>> theEducationList = new ArrayList<>();
+        List<Map<String, String>> theEducationList = new ArrayList<>();
 
-        for (Education education : newResume.getEducations()){
+        for (Education education : newResume.getEducations()) {
 
             Map<String, String> theEducation = new HashMap<>();
 
@@ -145,13 +167,13 @@ public class DocX4JController {
             theEducationList.add(theEducation);
         }
 
-        docX4JResumeService.addTablesToTemplate(docxFileName, new String[]{"EDUCATION_TIME","UNIVERSITY_NAME",
+        docX4JResumeService.addTablesToTemplate(docxFileName, new String[]{"EDUCATION_TIME", "UNIVERSITY_NAME",
                         "UNIVERSITY_COURSE"}, theEducationList,
                 System.getProperty("user.dir") + "/" + docxFileName);
 
-        List<Map<String,String>> theExperienceList = new ArrayList<>();
+        List<Map<String, String>> theExperienceList = new ArrayList<>();
 
-        for (Experience experience : newResume.getExperiences()){
+        for (Experience experience : newResume.getExperiences()) {
 
             Map<String, String> theExperience = new HashMap<>();
 
@@ -163,9 +185,32 @@ public class DocX4JController {
             theExperienceList.add(theExperience);
         }
 
-        docX4JResumeService.addTablesToTemplate(docxFileName, new String[]{"EXPERIENCE_TIME","EXPERIENCE_NAME",
+        docX4JResumeService.addTablesToTemplate(docxFileName, new String[]{"EXPERIENCE_TIME", "EXPERIENCE_NAME",
                         "EXPERIENCE_ROLE_NAME", "EXPERIENCE_DESCRIPTION"}, theExperienceList,
                 System.getProperty("user.dir") + "/" + docxFileName);
+
+        String textToAddInParagraph = "";
+
+        int i = 0;
+        for (Skill skill : newResume.getSkills()) {
+            textToAddInParagraph += skill.getName() + "\n" + skill.getDescription();
+            if (i++ != newResume.getSkills().size() - 1) {
+                textToAddInParagraph += "\n";
+            }
+        }
+
+        docX4JResumeService.addParagraphsToTemplate(docxFileName, "SKILL_NAME", textToAddInParagraph, System.getProperty("user.dir") + "/" + docxFileName);
+
+        i=0;
+        textToAddInParagraph = "";
+        for (Language language : newResume.getLanguages()) {
+            textToAddInParagraph += language.getName() + "\n" + language.getLevel();
+            if (i++ != newResume.getLanguages().size() - 1) {
+                textToAddInParagraph += "\n";
+            }
+        }
+
+        docX4JResumeService.addParagraphsToTemplate(docxFileName, "LANGUAGE_NAME", textToAddInParagraph, System.getProperty("user.dir") + "/" + docxFileName);
 
         docX4JResumeService.addImageToTemplate(docxFileName, "PICTURE", new File(imageSourcePath), System.getProperty("user.dir") + "/" + docxFileName);
 

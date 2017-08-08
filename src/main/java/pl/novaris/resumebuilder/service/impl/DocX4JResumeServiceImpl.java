@@ -210,10 +210,16 @@ public class DocX4JResumeServiceImpl implements DocX4JResumeService {
             if (texts.size() > 0) {
                 Text textToReplace = (Text) texts.get(0);
                 textToReplace.setValue(ptext);
+                ptext = as[++i];
+                textToReplace = (Text) texts.get(1);
+                textToReplace.setValue(" - " + ptext);
             }
 
             // add the paragraph to the document
-            addTo.getContent().add(copy);
+            //addTo.getContent().add(copy);
+            //((ContentAccessor)toReplace.getParent()).getContent().add(copy);
+            int index = addTo.getContent().indexOf(toReplace);
+            addTo.getContent().add(index, copy);
         }
 
         // 4. remove the original one
@@ -347,8 +353,10 @@ public class DocX4JResumeServiceImpl implements DocX4JResumeService {
     }
 
     @Override
-    public void addParagraphsToTemplate(String templateName, String placeholder, String textToAdd, ContentAccessor addTo) {
-
+    public void addParagraphsToTemplate(String templateName, String placeholder, String textToAdd, String target) throws IOException, Docx4JException {
+        WordprocessingMLPackage template = getTemplate(templateName);
+        replaceParagraph(placeholder, textToAdd, template, template.getMainDocumentPart());
+        writeDocxToStream(template,target);
     }
 
     @Override
