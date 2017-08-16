@@ -1,6 +1,6 @@
 package pl.novaris.resumebuilder.service.impl;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.docx4j.Docx4J;
 import org.docx4j.XmlUtils;
 import org.docx4j.convert.out.HTMLSettings;

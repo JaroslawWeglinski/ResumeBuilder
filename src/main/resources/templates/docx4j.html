@@ -6,6 +6,14 @@
 </head>
 <body>
 <h1>Curriculum Vitae</h1>
+<div>
+    <form method="POST" enctype="multipart/form-data" action="/">
+        <table>
+            <tr><td>Wyślij zdjęcie: </td><td><input type="file" name="file" /></td></tr>
+            <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+        </table>
+    </form>
+</div>
 <form action="#" th:action="@{/docx4j/fill}" th:object="${resume}" method="post">
   <fieldset>
     <p>Imię</p>
