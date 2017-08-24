@@ -3,175 +3,264 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Resume builder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"/>
+    <style>
+        textarea {
+            min-width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            color: #215B9A;
+        }
+
+        strong {
+            color: #39739A;
+        }
+
+    </style>
 </head>
 <body>
-<h1>Curriculum Vitae</h1>
-<div>
+<div class="container">
+    <h1><strong>GENERATOR CV</strong></h1>
     <form method="POST" enctype="multipart/form-data" action="/">
-        <table>
-            <tr><td>Wyślij zdjęcie: </td><td><input type="file" name="file" /></td></tr>
-            <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
-        </table>
+        Dodaj zdjęcie:
+        <label class="btn btn-primary" for="my-file-selector">
+            <input id="my-file-selector" type="file" name="file" style="display:none"
+                   onchange="$('#upload-file-info').html(this.files[0].name)"/>
+            Wybierz plik
+        </label>
+        <span class='label label-info' id="upload-file-info"></span>
+
+        <input type="submit" class="btn btn-info" value="Wyślij"/>
+
+    </form>
+    <form action="#" th:action="@{/docx4j/fill}" th:object="${resume}" method="post">
+        <fieldset>
+
+            <h2>Dane podstawowe</h2>
+            <div class="form-group row">
+
+                <div class="col-sm-4">
+                    <label>Imię</label><br/>
+                    <input class="form-control" type="text" th:field="*{name}"/>
+                </div>
+
+                <div class="col-sm-4">
+                    <label>Nazwisko</label><br/>
+                    <input class="form-control" type="text" th:field="*{surname}"/>
+                </div>
+
+                <div class="col-sm-4">
+                    <label>Data urodzenia</label><br/>
+                    <input class="form-control" type="text" th:field="*{birthday}"/>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label>Miejsce zamieszkania 1</label><br/>
+                    <input class="form-control" type="text" th:field="*{locationOne}"/>
+                </div>
+                <div class="col-sm-8">
+                    <label>Miejsce zamieszkania 2</label><br/>
+                    <input class="form-control" type="text" th:field="*{locationTwo}"/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label>Adres e-mail</label><br/>
+                    <input class="form-control" type="text" th:field="*{email}"/>
+                </div>
+                <div class="col-sm-8">
+                    <label>Numer telefonu</label><br/>
+                    <input class="form-control" type="text" th:field="*{phone}"/>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <h2>Cel zawodowy</h2>
+                    <textarea class="form-control" type="textarea" rows="5" th:field="*{target}"/>
+                </div>
+            </div>
+
+            <div>
+                <label><h2>Wykształcenie</h2></label>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Lata</th>
+                        <th>Nazwa uczelni</th>
+                        <th>Nazwa kierunku</th>
+                        <th>
+                            <button type="submit" class="btn" name="addEducation">Dodaj wykształcenie</button>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="education,eduStat : *{educations}">
+                        <td>
+                        <textarea class="form-control" type="textarea"
+                                  th:field="*{educations[__${eduStat.index}__].time}"
+                                  th:errorclass="fieldError"/>
+                        </td>
+                        <td>
+                        <textarea class="form-control" type="textarea"
+                                  th:field="*{educations[__${eduStat.index}__].universityName}"
+                                  th:errorclass="fieldError"/>
+                        </td>
+                        <td>
+                        <textarea class="form-control" type="textarea"
+                                  th:field="*{educations[__${eduStat.index}__].universityCourse}"
+                                  th:errorclass="fieldError"/>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn" name="removeEducation" th:value="${eduStat.index}">Usuń
+                                wykształcenie
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <label><h2>Doświadczenie</h2></label>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Lata</th>
+                        <th>Pracodawca</th>
+                        <th>Stanowisko</th>
+                        <th>Opis</th>
+                        <th>
+                            <button type="submit" class="btn" name="addExperience">Dodaj doświadczenie</button>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="experience,expStat : *{experiences}">
+                        <td>
+                        <textarea class="form-control" type="textarea"
+                                  th:field="*{experiences[__${expStat.index}__].time}"
+                                  th:errorclass="fieldError"/>
+                        </td>
+                        <td>
+                        <textarea class="form-control" type="textarea"
+                                  th:field="*{experiences[__${expStat.index}__].name}"
+                                  th:errorclass="fieldError"/>
+                        </td>
+                        <td>
+                        <textarea class="form-control" type="textarea"
+                                  th:field="*{experiences[__${expStat.index}__].roleName}"
+                                  th:errorclass="fieldError"/>
+                        </td>
+                        <td>
+                        <textarea class="form-control" type="textarea"
+                                  th:field="*{experiences[__${expStat.index}__].description}"
+                                  th:errorclass="fieldError"/>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn" name="removeExperience" th:value="${expStat.index}">Usuń
+                                doświadczenie
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <label><h2>Umiejętności</h2></label>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Opis</th>
+                        <th>
+                            <button type="submit" class="btn" name="addSkill">Dodaj umiejętność</button>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="skill,skillStat : *{skills}">
+                        <td>
+                        <textarea class="form-control" type="textarea" th:field="*{skills[__${skillStat.index}__].name}"
+                                  th:errorclass="fieldError"/>
+                        </td>
+                        <td>
+                        <textarea class="form-control" type="textarea"
+                                  th:field="*{skills[__${skillStat.index}__].description}"
+                                  th:errorclass="fieldError"/>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn" name="removeSkill" th:value="${skillStat.index}">Usuń
+                                umiejętność
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <label><h2>Języki</h2></label>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Poziom</th>
+                        <th>
+                            <button type="submit" class="btn" name="addLanguage">Dodaj język</button>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="language,langStat : *{languages}">
+                        <td>
+                        <textarea class="form-control" type="textarea"
+                                  th:field="*{languages[__${langStat.index}__].name}"
+                                  th:errorclass="fieldError"/>
+                        </td>
+                        <td>
+                        <textarea class="form-control" type="textarea"
+                                  th:field="*{languages[__${langStat.index}__].level}"
+                                  th:errorclass="fieldError"/>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn" name="removeLanguage" th:value="${langStat.index}">Usuń
+                                język
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Certyfikaty</h2>
+            <textarea class="form-control" type="textarea" th:field="*{certificate}"/>
+
+            <h2>Zainteresowania</h2>
+            <textarea class="form-control" type="textarea" th:field="*{hobby}"/>
+
+            <br/>
+            <p>
+                <button type="submit" class="btn btn-success" name="save">Generuj</button>
+            </p>
+
+        </fieldset>
     </form>
 </div>
-<form action="#" th:action="@{/docx4j/fill}" th:object="${resume}" method="post">
-  <fieldset>
-    <p>Imię</p>
-    <textarea type="textarea" th:field="*{name}" />
-
-    <p>Nazwisko</p>
-    <textarea type="textarea" th:field="*{surname}" />
-
-    <p>Data urodzenia</p>
-    <textarea type="textarea" th:field="*{birthday}" />
-
-    <p>Miejsce zamieszkania 1</p>
-    <textarea type="textarea" th:field="*{locationOne}" />
-
-    <p>Miejsce zamieszkania 2</p>
-    <textarea type="textarea" th:field="*{locationTwo}" />
-
-    <p>Adres e-mail</p>
-    <textarea type="textarea" th:field="*{email}" />
-
-    <p>Numer telefonu</p>
-    <textarea type="textarea" th:field="*{phone}" />
-
-    <p>Cel zawodowy</p>
-    <textarea type="textarea" th:field="*{target}" />
-
-      <div>
-          <label>Wykształcenie</label>
-          <table>
-              <thead>
-              <tr>
-                  <th>Lata</th>
-                  <th>Nazwa uczelni</th>
-                  <th>Nazwa kierunku</th>
-                  <th>
-                      <button type="submit" name="addEducation">Dodaj wykształcenie</button>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr th:each="education,eduStat : *{educations}">
-                  <td>
-                      <textarea type="textarea" th:field="*{educations[__${eduStat.index}__].time}" th:errorclass="fieldError" />
-                  </td>
-                  <td>
-                      <textarea type="textarea" th:field="*{educations[__${eduStat.index}__].universityName}" th:errorclass="fieldError" />
-                  </td>
-                  <td>
-                      <textarea type="textarea" th:field="*{educations[__${eduStat.index}__].universityCourse}" th:errorclass="fieldError" />
-                  </td>
-                  <td>
-                      <button type="submit" name="removeEducation" th:value="${eduStat.index}">Usuń wykształcenie</button>
-                  </td>
-              </tr>
-              </tbody>
-          </table>
-      </div>
-
-    <div>
-        <label>Doświadczenie</label>
-        <table>
-            <thead>
-            <tr>
-                <th>Lata</th>
-                <th>Pracodawca</th>
-                <th>Stanowisko</th>
-                <th>Opis</th>
-                <th>
-                    <button type="submit" name="addExperience">Dodaj doświadczenie</button>
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="experience,expStat : *{experiences}">
-                <td>
-                    <textarea type="textarea" th:field="*{experiences[__${expStat.index}__].time}" th:errorclass="fieldError" />
-                </td>
-                <td>
-                    <textarea type="textarea" th:field="*{experiences[__${expStat.index}__].name}" th:errorclass="fieldError" />
-                </td>
-                <td>
-                    <textarea type="textarea" th:field="*{experiences[__${expStat.index}__].roleName}" th:errorclass="fieldError" />
-                </td>
-                <td>
-                    <textarea type="textarea" th:field="*{experiences[__${expStat.index}__].description}" th:errorclass="fieldError" />
-                </td>
-                <td>
-                    <button type="submit" name="removeExperience" th:value="${expStat.index}">Usuń doświadczenie</button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-      <div>
-          <label>Umiejętności</label>
-          <table>
-              <thead>
-              <tr>
-                  <th>Nazwa</th>
-                  <th>Opis</th>
-                  <th>
-                      <button type="submit" name="addSkill">Dodaj umiejętność</button>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr th:each="skill,skillStat : *{skills}">
-                  <td>
-                      <textarea type="textarea" th:field="*{skills[__${skillStat.index}__].name}" th:errorclass="fieldError" />
-                  </td>
-                  <td>
-                      <textarea type="textarea" th:field="*{skills[__${skillStat.index}__].description}" th:errorclass="fieldError" />
-                  </td>
-                  <td>
-                      <button type="submit" name="removeSkill" th:value="${skillStat.index}">Usuń umiejętność</button>
-                  </td>
-              </tr>
-              </tbody>
-          </table>
-      </div>
-
-      <div>
-          <label>Języki</label>
-          <table>
-              <thead>
-              <tr>
-                  <th>Nazwa</th>
-                  <th>Poziom</th>
-                  <th>
-                      <button type="submit" name="addLanguage">Dodaj język</button>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr th:each="language,langStat : *{languages}">
-                  <td>
-                      <textarea type="textarea" th:field="*{languages[__${langStat.index}__].name}" th:errorclass="fieldError" />
-                  </td>
-                  <td>
-                      <textarea type="textarea" th:field="*{languages[__${langStat.index}__].level}" th:errorclass="fieldError" />
-                  </td>
-                  <td>
-                      <button type="submit" name="removeLanguage" th:value="${langStat.index}">Usuń język</button>
-                  </td>
-              </tr>
-              </tbody>
-          </table>
-      </div>
-
-    <p>Certyfikaty</p>
-    <textarea type="textarea" th:field="*{certificate}" />
-
-    <p>Zainteresowania</p>
-    <textarea type="textarea" th:field="*{hobby}" />
-
-    <p><button type="submit" name="save" >Generate</button></p>
-  </fieldset>
-</form>
+<script type="text/javascript" src="/js/maintainscroll.jquery.js"/>
 </body>
 </html>
