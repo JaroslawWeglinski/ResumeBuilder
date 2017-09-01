@@ -10,6 +10,7 @@
     <style>
         textarea {
             min-width: 100%;
+            white-space: pre-wrap;
         }
 
         h1 {
@@ -29,7 +30,7 @@
 <body>
 <div class="container">
     <h1><strong>GENERATOR CV</strong></h1>
-    <form method="POST" enctype="multipart/form-data" action="/">
+    <form method="POST" enctype="multipart/form-data" action="/storage/">
         Dodaj zdjęcie:
         <label class="btn btn-primary" for="my-file-selector">
             <input id="my-file-selector" type="file" name="file" style="display:none"
@@ -256,6 +257,12 @@
             <br/>
             <p>
                 <button type="submit" class="btn btn-success" name="save">Generuj</button>
+            </p>
+            <p>
+                <button type="submit" class="btn btn-info" name="saveResume">Zapisz</button>
+            </p>
+            <p>
+                <a href="/resume/list">Powrót do listy pracowników</a>
             </p>
 
         </fieldset>

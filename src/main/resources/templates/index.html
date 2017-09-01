@@ -2,16 +2,44 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Index</title>
+    <title>Resume builder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"/>
+    <style>
+        textarea {
+            min-width: 100%;
+            white-space: pre-wrap;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            color: #215B9A;
+        }
+
+        strong {
+            color: #39739A;
+        }
+
+    </style>
 </head>
 <body>
-<h1>Curriculum Vitae</h1>
-<form action="#" th:action="@{/build}" th:object="${resume}" method="post">
-    <p>Cel zawodowy</p>
-    <textarea type="textarea" th:field="*{target}" />
-
-    <p><button name="submit" value="Submit" >Generate</button></p>
-
-</form>
+<div class="container">
+    <h1><strong>GENERATOR CV</strong></h1>
+    <p>
+        <input type="button" value="Generuj CV"
+               onclick="window.location.href='/docx4j/fill'; return false;"
+               class="btn"/></p>
+    <p>
+        <input type="button" value="Lista pracowników"
+               onclick="window.location.href='/resume/list'; return false;"
+               class="btn"/>
+    </p>
+</div>
+<script type="text/javascript" src="/js/maintainscroll.jquery.js"/>
 </body>
 </html>

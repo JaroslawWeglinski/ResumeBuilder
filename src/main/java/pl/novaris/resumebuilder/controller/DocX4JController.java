@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pl.novaris.resumebuilder.dao.entity.*;
@@ -33,6 +34,10 @@ public class DocX4JController {
     private DocX4JResumeService docX4JResumeService;
 
     @Autowired
+    @Qualifier("resumeService")
+    private ResumeService resumeService;
+
+    @Autowired
     @Qualifier("resume")
     private Resume resume;
 
@@ -50,6 +55,15 @@ public class DocX4JController {
         model.addAttribute("resume", new Resume());
 
         return "docx4j";
+    }
+
+    @PostMapping(value = "/fill", params = "saveResume")
+    public String saveResume(@ModelAttribute("resume") Resume theResume){
+
+        resumeService.saveResume(theResume);
+
+        return "redirect:/resume/list";
+
     }
 
     @RequestMapping(value = "/fill", params = {"addEducation"})

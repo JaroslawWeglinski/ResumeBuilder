@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:c="http://java.sun.com/xml/ns/javaee">
+<head>
+    <meta charset="UTF-8" />
+    <title>List Resumes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"/>
+    <style>
+        textarea {
+            min-width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            color: #215B9A;
+        }
+
+        strong {
+            color: #39739A;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="wrapper">
+    <div id="header">
+        <h1><strong>GENERATOR CV</strong></h1>
+    </div>
+</div>
+
+<div class="container">
+
+        <input type="button" value="Dodaj pracownika"
+               onclick="window.location.href='showFormForAdd'; return false;"
+               class="btn" />
+        <div>
+        <table class="table">
+            <tr>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>Email</th>
+                <th>Akcja</th>
+            </tr>
+            <th:block th:each="tempResume : ${resumes}">
+                <tr>
+                    <td th:text="${tempResume.name}">...</td>
+                    <td th:text="${tempResume.surname}">...</td>
+                    <td th:text="${tempResume.email}">...</td>
+                    <td>
+                        <a th:href="@{'/resume/showFormForUpdate?resumeId=' + ${tempResume.id}}">Aktualizuj</a>
+                        |
+                        <a th:href="@{'/resume/delete?resumeId=' + ${tempResume.id}}"
+                           onclick="if (!(confirm('Jesteś pewien że chcesz usunąć pracownika?'))) return false">Usuń</a>
+                    </td>
+                </tr>
+            </th:block>
+        </table>
+        </div>
+
+
+</div>
+
+</body>
+</html>

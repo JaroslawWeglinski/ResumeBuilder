@@ -27,8 +27,6 @@ public class TestController {
         data.put("name",person);
         try {
             pdfGeneratorUtil.createPdf("test", data);
-            HibernateConfig hbConf = new HibernateConfig();
-            hbConf.connectToDb();
         }catch(Exception e) {e.printStackTrace();}
         return String.format("Hello, %s!", person);
     }
